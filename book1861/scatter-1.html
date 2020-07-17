@@ -25,19 +25,11 @@
                     return d[0];
                 })])
                 .range([0, xAxisWidth]);
-            let yScale = d3.scaleLinear()
-                .domain([1.2 * d3.max(dataset, function(d) {
+            var yScale = d3.scaleLinear()
+                .domain([0, 1.2 * d3.max(dataset, function(d) {
                     return d[1];
-                }), 0])
-                .range([yAxisWidth, 0]);
-            let xAxis = d3.axisBottom(xScale);
-            let gxAxis = svg.append("g")
-                .attr("transform", "translate(50, 550)");
-            xAxis(gxAxis);
-            let yAxis = d3.axisLeft(yScale);
-            let gyAxis = svg.append("g")
-                .attr("transform", "translate(50, 50)");
-            yAxis(gyAxis);
+                })])
+                .range([0, yAxisWidth]);
 
             svg.selectAll("circle")
                 .data(dataset)
@@ -52,6 +44,17 @@
                     return height - 50 - yScale(d[1]);
                 })
                 .attr("r", 5);
+            let gxAxis = svg.append("g")
+                .attr("transform", "translate(50, 550)")
+                .call(d3.axisBottom(xScale));
+
+            yScale = d3.scaleLinear()
+                .range([yAxisWidth, 0]);
+            let gyAxis = svg.append("g")
+                .attr("transform", "translate(50, 50)")
+                .call(d3.axisLeft(yScale));
+
+           
         </script>
     </body>
 </html>
