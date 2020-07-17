@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+        <script>
+            let power = d3.scalePow()
+                .exponent(3);
+            console.log(power(2));
+            console.log(power(3));
+            let square = d3.scalePow()
+                .exponent(0.5);
+            console.log(square(2));
+            console.log(square(3));
+        </script>
+    </body>
+</html>
