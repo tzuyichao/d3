@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+        <script>
+            let width = 400;
+            let height = 400;
+            let dataset = [50, 43, 120, 87, 99, 167, 142];
+
+            let svg = d3.select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            let padding = {top: 20, right: 20, bottom: 20, left: 20};
+            let rectStep = 35;
+            let rectWidth = 30;
+
+            let rect = svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("fill", "steelblue")
+                .attr("x", function(d, i) {
+                    return padding.left + i * rectStep;
+                })
+                .attr("y", function(d) {
+                    return height - padding.bottom - d;
+                })
+                .attr("width", rectWidth)
+                .attr("height", function(d) {
+                    return d;
+                });
+        </script>
+    </body>
+</html>
