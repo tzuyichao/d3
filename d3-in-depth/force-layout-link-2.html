@@ -17,7 +17,7 @@
                 text-anchor: middle;
                 font-family: "Helvetica Neue", Helvetica, sans-serif;
                 fill: #666;
-                font-size: 16px;
+                font-size: 10px;
             }
         </style>
     </head>
@@ -81,14 +81,15 @@
 
             function updateNodes() {
                 let update = d3.select(".nodes")
-                    .selectAll("circle")
+                    .selectAll("g")
                     .data(nodes);
-                update.enter()
-                    .append("circle")
+                var node = update.enter()
+                    .append("g")
                     .merge(update)
                     .attr("transform", function(d) {
                         return "translate(" + d.x + "," + d.y + ")";
-                    })
+                    });
+                node.append("circle")
                     .attr("r", function(d) {
                         return 5;
                     })
@@ -97,6 +98,12 @@
                     .on("start", dragstarted)
                     .on("drag", dragged)
                     .on("end", dragended));
+                node.append("text")
+                    .text(function(d) {
+                        return d.name;
+                    })
+                    .attr('x', 10)
+                    .attr('y', 3);
                 update.exit().remove();
             }
 
