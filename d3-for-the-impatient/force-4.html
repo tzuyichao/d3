@@ -18,6 +18,18 @@
     font-family: sans-serif;
     font-size: 10px;
     }
+
+    .node_tooltip {
+        position: absolute;
+        border: 1px solid black;
+        border-radius: 10%;
+        width: 120px;
+        display: none;
+    }
+
+    .node_tooltip .title {
+        border-bottom: 1px solid black;
+    }
     </style>
 </head>
 <body>
@@ -29,6 +41,15 @@
             <p class="card-text"><em>ID:</em><span id="id"></span></p>
             <p class="card-text"><em>Group:</em><span id="group"></span></p>
             </div>
+        </div>
+    </div>
+    <div class="node_tooltip">
+        <div class="title">
+            Node Detail
+        </div>
+        <div>
+            <p class="card-text"><em>ID:</em><span id="tip_id"></span></p>
+            <p class="card-text"><em>Group:</em><span id="tip_group"></span></p>
         </div>
     </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -59,6 +80,21 @@
                 .data(graph.ps)
                 .enter()
                 .append("g")
+                .on("mouseover", function(d) {
+                    console.log(d3.mouse(this));
+                    console.log(d);
+                    d3.select(".node_tooltip")
+                      .style("left", d.x + "px")
+                      .style("top", d.y + "px")
+                      .style("display", "block");
+                      d3.select("#tip_id").text(function() { return d.id; })
+                    d3.select("#tip_group").text(function() { return d.group; })
+                })
+                .on("mouseout", function(d) {
+                    console.log(d3.mouse(this));
+                    console.log(d);
+                    d3.select(".node_tooltip").style("display", "none");
+                })
                 .on("click", function(d) {
                     console.log(d3.mouse(this));
                     console.log(d);
