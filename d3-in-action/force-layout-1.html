@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <svg width="500" height="500"></svg>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+        let roleScale = d3.scaleOrdinal().range(["#75739F", "#41A368", "FE9922"]);
+        let sampleData = d3.range(100).map((d, i) => ({r: 50 - i * .5}));
+        let manyBody = d3.forceManyBody().strength(10);
+        let center = d3.forceCenter().x(250).y(250);
+        d3.forceSimulation(sampleData)
+            .force("charge", manyBody)
+            .force("center", center)
+            .force("collision", d3.forceCollide(d => d.r))
+            .on("tick", updateNetwork);
+        d3.select("svg")
+            .selectAll("circle")
+            .data(sampleData)
+            .enter()
+            .append("circle")
+            .style("fill", (d, i) => roleScale(i))
+            .attr("r", d => d.r);
+        function updateNetwork() {
+            d3.selectAll("circle")
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+        }
+    </script>
+</body>
+</html>
