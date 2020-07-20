@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Tree Layout</title>
+        <title>Cluster Layout</title>
         <style>
             .node {
               fill: steelblue;
@@ -51,28 +51,19 @@
                     }
                 ]
             }
-            let treeLayout = d3.tree().size([400, 200]);
+            let clusterLayout = d3.cluster().size([400, 200]);
             let root = d3.hierarchy(data);
-            treeLayout(root);
+            clusterLayout(root);
 
-            var nodes = d3.select("svg g.nodes")
-                .selectAll("g")
+            d3.select("svg g.nodes")
+                .selectAll("circle.node")
                 .data(root.descendants())
                 .enter()
-                .append("g");
-            
-            nodes.append("circle")
+                .append("circle")
                 .classed("node", true)
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y)
                 .attr("r", 4);
-            nodes.append("text")
-                .text(function(d) {
-                    console.log(d)
-                    return d.data.name;
-                })
-                .attr("x", d => d.x + 6)
-                .attr("y", d => d.y + 7);
             d3.select("svg g.links")
                 .selectAll("line.link")
                 .data(root.links())
