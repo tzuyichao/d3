@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Drag example 1</title>
+</head>
+<body>
+    <svg width="600" height="400"></svg>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        const drag = d3.drag()
+            .on("start", function() {
+                console.log(this);
+                d3.select(this).raise();
+                d3.select(this).style("cursor", "move");
+            })
+            .on("drag", function() {
+                console.log(this);
+                const xRect = +d3.select(this).attr("x"), // read coordinates
+                yRect = +d3.select(this).attr("y")
+                const x = xRect + d3.event.dx;   // compute new coordinates
+                const y = yRect + d3.event.dy;
+                d3.select(this).attr("x", x)     // update selection
+                d3.select(this).attr("y", y)
+            })
+            .on("end", function() {
+                console.log(this);
+                d3.select(this).style("cursor", "auto");
+            });
+        const colors = [['#e41a1c','#377eb8','#4daf4a'],
+            ['#984ea3','#ff7f00','#ffff33'],
+            ['#a65628','#f781bf','#999999']];
+        const data = d3.merge(colors.map((p,i) =>
+            p.map((q,j) => ({color: q, row: i, col: j}))));
+        const side = 96;
+        const svg = d3.select("svg");
+        svg.selectAll("rect.square")
+            .data(data).join("rect").attr("class","square")
+            .attr("x", d => 2 + 100 * (d.row + 1))
+            .attr("y", d => 2 + 100 * (d.col + 1))
+            .attr("width", side)
+            .attr("height", side)
+            .style("fill", d => d.color)
+            .call(drag);
+    </script>
+</body>
+</html>
