@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hierarchical 1</title>
+</head>
+<body>
+    <svg width="900" height="600"></svg>
+    <script src="https://d3js.org/d3.v4.min.js" type="text/javascript" crossorigin="anonymous"></script>
+    <script>
+    d3.json("tweets.json", vis);
+    function vis(data) {
+        const depthScale = d3.scaleOrdinal()
+            .range(["#5EAFC6", "#FE9922", "#93C464", "#75739F"]);
+        const nestedTweets = d3.nest()
+            .key(d => d.user)
+            .entries(data.tweets);
+        console.log(nestedTweets); 
+        const packableTweets = {id: "All Tweets", values: nestedTweets};
+        const packChart = d3.pack();
+        packChart.size([500, 500]);
+        const root = d3.hierarchy(packableTweets, d => d.values)
+            .sum(() => 1);
+        d3.select("svg")
+            .append("g")
+            .attr("transform", "translate(100, 20)")
+            .selectAll("circle")
+            .data(packChart(root).descendants())
+            .enter()
+            .append("circle")
+            .attr("r", d => d.r)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .style("fill", d => depthScale(d.depth))
+            .style("stroke", "black");
+    }
+    </script>
+</body>
+</html>
