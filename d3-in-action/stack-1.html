@@ -8,7 +8,36 @@
     <svg width="600" height="600"></svg>
     <script src="https://d3js.org/d3.v4.min.js" type="text/javascript" crossorigin="anonymous"></script>
     <script>
-        
+        d3.csv("movies.csv", dataViz);
+        function dataViz(data) {
+            const xScale = d3.scaleLinear().domain([0, 10]).range([0, 500]);
+            const yScale = d3.scaleLinear().domain([0, 100]).range([500, 0]);
+            const movies = ["titanic", "avatar", "akira", "frozen", "deliverance", "avengers"];
+            console.log(xScale(7));
+            console.log(data);
+            const fillScale = d3.scaleOrdinal()
+                .domain(movies)
+                .range(["#fcd88a", "#cf7c1c", "#93c464", "#75734f", "#5eafc6", "#41a368"]);
+            movies.forEach(d => console.log(`${d}:` + fillScale(d)));
+
+            const stackLayout = d3.stack()
+                .keys(movies);
+            const stackArea = d3.area()
+                .x((d, i) => xScale(i))
+                .y0(d => yScale(d[0]))
+                .y1(d => yScale(d[1]));
+            d3.select("svg")
+                .selectAll("path")
+                .data(stackLayout(data))
+                .enter()
+                .append("path")
+                .style("fill", d => fillScale(d.key))
+                .attr("d", d => {
+                    let area = stackArea(d);
+                    console.log(`${d}: ${area}`);
+                    return area;
+                });
+        }
     </script>
 </body>
 </html>
