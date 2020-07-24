@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pie chart 1</title>
+</head>
+<body>
+    <svg width="600" height="600"></svg>
+    <script src="https://d3js.org/d3.v4.min.js" type="text/javascript" crossorigin="anonymous"></script>
+    <script>
+        const pieChart = d3.pie();
+        const myPie = pieChart([1, 2, 1])
+        console.log(myPie);
+        const newArc = d3.arc();
+        newArc.innerRadius(40)
+            .outerRadius(100);
+        console.log(newArc(myPie[0]));
+        const fillColor = d3.scaleOrdinal()
+            .range(["#fcd88a", "#cf7c1c", "#93c464"]);
+        d3.select("svg")
+            .append("g")
+            .attr("transform", "translate(250, 250)")
+            .selectAll("path")
+            .data(myPie)
+            .enter()
+            .append("path")
+            .attr("d", newArc)
+            .style("fill", (d, i) => fillColor(i))
+            .style("stroke", "black")
+            .style("stroke-width", "2px");
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Violin chart 1</title>
+</head>
+<body>
+    <svg width="900" height="600"></svg>
+    <script src="https://d3js.org/d3.v4.min.js" type="text/javascript" crossorigin="anonymous"></script>
+    <script>
+        const fillColor = d3.scaleOrdinal()
+            .range(["#fcd88a", "#cf7c1c", "#93c464"]);
+        const normal = d3.randomNormal()
+        const sampleData1 = d3.range(100).map(d => normal())
+        const sampleData2 = d3.range(100).map(d => normal())
+        const sampleData3 = d3.range(100).map(d => normal())
+        
+        const histoChart = d3.histogram();
+
+        histoChart.domain([-3, 3, 1])
+            .thresholds([-3, -2.5, -2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+            .value(d => d);
+        const yScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([400, 0]);
+        const yAxis = d3.axisRight().scale(yScale).tickSize(300);
+        const xPadding = 10, yPadding = 10;
+        d3.select("svg")
+            .append("g")
+            .attr("transform", `translate(${xPadding}, ${yPadding})`)
+            .call(yAxis);
+        const area = d3.area()
+            .x0(d => -d.length)
+            .x1(d => d.length)
+            .y(d => yScale(d.x0));
+        d3.select("svg")
+            .selectAll("g.violin")
+            .data([sampleData1, sampleData2, sampleData3])
+            .enter()
+            .append("g")
+            .attr("class", "violin")
+            .attr("transform", (d, i) => `translate(${xPadding+50+i*100}, ${yPadding + 0})`)
+            .append("path")
+            .style("stroke", "black")
+            .style("fill", (d, i) => fillColor(i))
+            .attr("d", d => {
+                console.log(d);
+                let val = area(histoChart(d));
+                console.log(val)
+                return val;
+            });
+
+    </script>
+</body>
+</html>

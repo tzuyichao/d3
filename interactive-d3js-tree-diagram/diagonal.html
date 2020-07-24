@@ -20,9 +20,13 @@
             .attr("class", "link")
             .attr("d", diagonal({x: 100, y:100}, {x:300, y:300}));
 
-            svg.append("path")
+        svg.append("path")
             .attr("class", "link")
             .attr("d", diagonal({x: 100, y:100}, {x:200, y:300}));
+        
+        svg.append("path")
+            .attr("class", "link")
+            .attr("d", diagonal({x: 100, y:100}, {x:300, y:200}));
         
         function diagonal(s, d) {
             path = `M ${s.y} ${s.x}
